@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+box Application
+    participant "Spring Security"
+    participant "Spring Framework\nDispatcherServlet"
+end box
+
+User -> "Spring Security": <b>GET http://localhost:8080/hello.html
+"Spring Security" -> "Spring Security": Пользователь не\nаутентифицирован
+"Spring Security" -> User: <b>401 Unauthorized\nWWW-Authenticate: Basic Realm="my realm"
+User -> "Spring Security": <b>GET http://localhost:8080/hello.html\nAuthorization: Basic...
+"Spring Security" -> "Spring Security": Аутентификация\nпользователя
+"Spring Security" -> "Spring Framework\nDispatcherServlet": <b>GET http://localhost:8080/hello.html\nAuthorization: Basic...
+"Spring Framework\nDispatcherServlet" -> "Spring Security": <b>200 OK\nContent-Type: text/html\n\n<h1>Hello<h1>
+"Spring Security" -> User: <b>200 OK\nContent-Type: text/html\n\n<h1>Hello<h1>
+
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml
+
+// basic authentication применяется для stateless систем

@@ -1,0 +1,41 @@
+server:
+  port: 8081
+logging:
+  level:
+    org.springframework.security: TRACE
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/security_app_db
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/myrealm
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/myrealm
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: springsecurity
+            client-secret: IppgSkYhksZGuMf1RBsxLcZQrHsVHzzw
+            scope: openid
+springdoc:
+  api-docs:
+    path: /api-docs/v3/api-docs
+  swagger-ui:
+    path: /api-docs/swagger-ui.html
+    url: /api-docs/v3/api-docs
+
+
+

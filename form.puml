@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+box Application
+    participant "Spring Security"
+    participant "Spring Framework\nDispatcherServlet"
+end box
+
+User -> "Spring Security": <b>GET http://localhost:8080/hello.html
+"Spring Security" -> "Spring Security": Пользователь не\nаутентифицирован
+"Spring Security" --> User: <b>302 Found\nLocation: http://localhost:8080/login\nSet-Cookie: JSESSIONID=1
+User -> "Spring Security": <b>POST http://localhost:8080/login\nContent-Type: application/x-www-form-urlencoded\n\nusername=user&password=password
+"Spring Security" -> "Spring Security": Аутентификация\nпользователя
+"Spring Security" --> User: <b>302 Found\nLocation: http://localhost:8080/hello.html?continue\nSet-Cookie: JSESSIONID=2
+User -> "Spring Security": <b>GET http://localhost:8080/hello.html\nCookie: JSESSIONID=2
+"Spring Security" -> "Spring Security": Получение пользовательской\nсессии
+"Spring Security" -> "Spring Framework\nDispatcherServlet": <b>GET http://localhost:8080/hello.html
+"Spring Framework\nDispatcherServlet" -> "Spring Security": <b>200 OK\nContent-Type: text/html\n\n<h1>Hello<h1>
+"Spring Security" -> User: <b>200 OK\nContent-Type: text/html\n\n<h1>Hello<h1>
+
+@enduml
+
+// form authentication поддерживает состояние между запросами

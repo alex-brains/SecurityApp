@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Filter -> Filter: Формирование запроса\nна аутентификацию\n(Authentication)
+Filter -> AuthenticationManager: authenticate(Authentication)\nреализация его ProviderManager
+AuthenticationManager -> AuthenticationProvider: authenticate(Authentication)\nсам провайдер\nне делает аутентификацию\nищет у List<AuthenticationProvider> нужный провайдер,\nи отдает ему для аутентификации
+AuthenticationProvider -> UserDetailsService: loadUserByUserName(username)
+UserDetailsService --> AuthenticationProvider: UserDetail
+AuthenticationProvider -> AuthenticationProvider: Обработка запроса\nаутентификации
+AuthenticationProvider --> AuthenticationManager: Authentication
+AuthenticationManager --> Filter: Authentication
+Filter -> Filter: Сохранение результата\nаутентификации\nв контексте безопасности
+
+@enduml
